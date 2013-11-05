@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+
+	<title>Introduction to Front-end optimization</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<link rel="stylesheet" href="reveal/css/reveal.css">
+	<link rel="stylesheet" href="reveal/css/theme/solarized.css">
+	<link rel="stylesheet" href="tomorrow.css">
+	
+	<style type="text/css">
+			.slides section pre { width: 1000px; }
+			pre .important {
+				background: #C00;
+				color: #fff;
+				font-weight: bold;
+				padding: 1px 8px;
+				border-radius: 8px;
+			}
+			.slides table th {
+				font-weight: bold;
+			}
+			.slides pre {
+				background: #fff;
+			}
+			.slides table {
+				width: 100%;
+			}
+			.reveal .slides img {
+				margin: 0; padding:0; border:0;
+			}
+		</style>
+</head>
+
+<body>
+
+	<div class="reveal">
+
+		<div class="slides">
+			<section>
+				<span class=fragment data-fragment-index=0 style="position: relative">Cool</span>
+				<h2>Building Websites on Google Cloud</h2>
+
+				Mohammad Tayseer<br>
+				<a href="http://mtayseer.net">Blog</a>
+				/
+				<a href="http://github.com/mtayseer">Github</a>
+			</section>
+
+			<section>
+				<h2>How web applications work</h2>
+				<ol>
+					<li class=fragment>Application</li>
+					<pre><code class=python>
+	application = webapp2.WSGIApplication([
+	    
+	], debug=True)
+					</code></pre>
+					<li class=fragment>Request handlers</li>
+					<li class=fragment>Data store</li>
+					<li class=fragment>Templates</li>
+					<li class=fragment>Other services (users, ...)</li>
+				</ol>
+			</section>
+
+		</div>
+
+	</div>
+
+	<script src="reveal/lib/js/head.min.js"></script>
+	<script src="reveal/js/reveal.min.js"></script>
+
+	<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'linear',
+				dependencies: [
+					{ src: 'reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+				]
+			});
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-35924859-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+		</script>
+
+</body>
+</html>
