@@ -2,97 +2,124 @@
 <html lang="en">
 
 <head>
-	<meta charset="utf-8">
+    <meta charset="utf-8">
 
-	<title>Introduction to Front-end optimization</title>
+    <title>Introduction to Front-end optimization</title>
 
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-	<link rel="stylesheet" href="reveal/css/reveal.css">
-	<link rel="stylesheet" href="reveal/css/theme/solarized.css">
-	<link rel="stylesheet" href="tomorrow.css">
-	
-	<style type="text/css">
-			.slides section pre { width: 1000px; }
-			pre .important {
-				background: #C00;
-				color: #fff;
-				font-weight: bold;
-				padding: 1px 8px;
-				border-radius: 8px;
-			}
-			.slides table th {
-				font-weight: bold;
-			}
-			.slides pre {
-				background: #fff;
-			}
-			.slides table {
-				width: 100%;
-			}
-			.reveal .slides img {
-				margin: 0; padding:0; border:0;
-			}
-		</style>
+    <link rel="stylesheet" href="reveal/css/reveal.css">
+    <link rel="stylesheet" href="reveal/css/theme/solarized.css">
+    <link rel="stylesheet" href="tomorrow.css">
+    <link href="prettify.css" type="text/css" rel="stylesheet" />
+    <style type="text/css">
+            .slides section pre { width: 1000px; }
+            pre .important {
+                background: #C00;
+                color: #fff;
+                font-weight: bold;
+                padding: 1px 8px;
+                border-radius: 8px;
+            }
+            .slides table th {
+                font-weight: bold;
+            }
+            .slides pre {
+                background: #fff;
+            }
+            .slides table {
+                width: 100%;
+            }
+            .reveal .slides img {
+                margin: 0; padding:0; border:0;
+            }
+        </style>
 </head>
 
-<body>
+<body onload="prettyPrint()">
 
-	<div class="reveal">
+    <div class="reveal">
 
-		<div class="slides">
-			<section>
-				<span class=fragment data-fragment-index=0 style="position: relative">Cool</span>
-				<h2>Building Websites on Google Cloud</h2>
+        <div class="slides">
+            <section>
+                <h2>Building Websites on Google Cloud</h2>
 
-				Mohammad Tayseer<br>
-				<a href="http://mtayseer.net">Blog</a>
-				/
-				<a href="http://github.com/mtayseer">Github</a>
-			</section>
+                Mohammad Tayseer<br>
+                <a href="http://mtayseer.net">Blog</a>
+                /
+                <a href="http://github.com/mtayseer">Github</a>
+            </section>
 
-			<section>
-				<h2>How web applications work</h2>
-				<ol>
-					<li class=fragment>Application</li>
-					<pre><code class=python>
-	application = webapp2.WSGIApplication([
-	    
-	], debug=True)
-					</code></pre>
-					<li class=fragment>Request handlers</li>
-					<li class=fragment>Data store</li>
-					<li class=fragment>Templates</li>
-					<li class=fragment>Other services (users, ...)</li>
-				</ol>
-			</section>
+        
 
-		</div>
+            <section>
+                <h2>How web applications works - application</h2>
+                    <pre class=prettyprint><code class=python>
+application = webapp2.WSGIApplication([
+    ...
+], debug=True)
+                    </code></pre>
+            </section>
 
-	</div>
+            <section>
+                <h2>How web applications works - Request handlers</h2>
+                	
+                    <pre class=prettyprint><code class=python>
+class MainPage(webapp2.RequestHandler):
+    def get(self):
+        self.response.write('Hello')
 
-	<script src="reveal/lib/js/head.min.js"></script>
-	<script src="reveal/js/reveal.min.js"></script>
+application = webapp2.WSGIApplication([
+    ('/', MainPage),
+], debug=True)
+                    </code></pre>
+            </section>
 
-	<script>
+            <section>
+                <h2>How web applications works - Templates</h2>
+                <pre class=prettyprint><code class=python data-trim>
+class MainPage(webapp2.RequestHandler):
+    def get(self):
+        <span class=fragment>JINJA_ENVIRONMENT = jinja2.Environment(
+            loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
+            extensions=['jinja2.ext.autoescape'],
+            autoescape=True)</span>
+        <span class=fragment>template = JINJA_ENVIRONMENT.get_template('home.html')</span>
+        <span class=fragment>self.response.write(template.render({'message': 'Hello'}))</span>
 
-			// Full list of configuration options available here:
-			// https://github.com/hakimel/reveal.js#configuration
-			Reveal.initialize({
-				controls: true,
-				progress: true,
-				history: true,
-				center: true,
+application = webapp2.WSGIApplication([
+    ('/', MainPage),
+], debug=True)
+                    </code></pre>
+            </section>
 
-				transition: 'linear',
-				dependencies: [
-					{ src: 'reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
-					{ src: 'reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
-					{ src: 'reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-					{ src: 'reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: 'reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-				]
-			});
+            
+
+        </div>
+
+    </div>
+
+    <script src="reveal/lib/js/head.min.js"></script>
+    <script src="reveal/js/reveal.min.js"></script>
+	<script type="text/javascript" src="prettify.js"></script>
+    <script>
+
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                transition: 'linear',
+                dependencies: [
+                    { src: 'reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                ]
+            });
 
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-35924859-1']);
@@ -104,7 +131,7 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
         })();
 
-		</script>
+        </script>
 
 </body>
 </html>
