@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
 
-    <title>Introduction to Front-end optimization</title>
+    <title>Building Cool Websites on Google Cloud</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
@@ -13,13 +13,9 @@
     <link rel="stylesheet" href="tomorrow.css">
     <link href="prettify.css" type="text/css" rel="stylesheet" />
     <style type="text/css">
-            .slides section pre { width: 1000px; }
-            pre .important {
-                background: #C00;
-                color: #fff;
-                font-weight: bold;
-                padding: 1px 8px;
-                border-radius: 8px;
+            .slides section pre { width: 800px; }
+            pre {
+               overflow: hidden; 
             }
             .slides table th {
                 font-weight: bold;
@@ -32,6 +28,9 @@
             }
             .reveal .slides img {
                 margin: 0; padding:0; border:0;
+            }
+            .reveal pre code {
+            	overflow: visible;
             }
         </style>
 </head>
@@ -53,47 +52,49 @@
         
 
             <section>
-                <h2>How web applications works - application</h2>
-                    <pre class=prettyprint><code class=python>
+                <h2>How web applications works</h2>
+                <ol style="float: left">
+                	<li class=fragment data-fragment-index=0>Application</li>
+                	<li class=fragment data-fragment-index=1>Request handlers</li>
+                	<li class=fragment data-fragment-index=2>Templates</li>
+                	<li class=fragment data-fragment-index=6>Data store</li>
+                </ol>
+                    <pre class="prettyprint" style="float: right"><code data-trim>
+<span class=fragment data-fragment-index=3>JINJA_ENVIRONMENT = jinja2.Environment(
+    loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
+    extensions=['jinja2.ext.autoescape'],
+    autoescape=True)</span>
+
+<span class=fragment data-fragment-index=6>class Garbage(ndb.Model):
+    author = ndb.UserProperty()
+    name = ndb.StringProperty(indexed=False)
+    date = ndb.DateTimeProperty(auto_now_add=True)
+    position = ndb.GeoPtProperty()</span>
+<span class=fragment data-fragment-index=1>
+class MainPage(webapp2.RequestHandler):
+    def get(self):
+    	<span class=fragment data-fragment-index=1><span class="fragment fade-out" data-fragment-index=2>self.response.write('Hello, world')</span></span>
+        <span class=fragment data-fragment-index=4>template = JINJA_ENVIRONMENT.get_template('home.html')</span>
+        <span class=fragment data-fragment-index=5>self.response.write(template.render({'message': 'Hello'}))</span>
+</span>
+<span class="fragment" data-fragment-index=0>
 application = webapp2.WSGIApplication([
-    ...
+    ('/', MainPage),
 ], debug=True)
+</span>
                     </code></pre>
             </section>
 
             <section>
-                <h2>How web applications works - Request handlers</h2>
-                	
-                    <pre class=prettyprint><code class=python>
-class MainPage(webapp2.RequestHandler):
-    def get(self):
-        self.response.write('Hello')
-
-application = webapp2.WSGIApplication([
-    ('/', MainPage),
-], debug=True)
-                    </code></pre>
+            	<h2>How web applications works</h2>
             </section>
 
             <section>
-                <h2>How web applications works - Templates</h2>
-                <pre class=prettyprint><code class=python data-trim>
-class MainPage(webapp2.RequestHandler):
-    def get(self):
-        <span class=fragment>JINJA_ENVIRONMENT = jinja2.Environment(
-            loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
-            extensions=['jinja2.ext.autoescape'],
-            autoescape=True)</span>
-        <span class=fragment>template = JINJA_ENVIRONMENT.get_template('home.html')</span>
-        <span class=fragment>self.response.write(template.render({'message': 'Hello'}))</span>
-
-application = webapp2.WSGIApplication([
-    ('/', MainPage),
-], debug=True)
-                    </code></pre>
+            	<h2>References</h2>
+            	<ol>
+            		<li></li>
+            	</ol>
             </section>
-
-            
 
         </div>
 
@@ -111,6 +112,8 @@ application = webapp2.WSGIApplication([
                 progress: true,
                 history: true,
                 center: true,
+
+                width: 1200,
 
                 transition: 'linear',
                 dependencies: [
