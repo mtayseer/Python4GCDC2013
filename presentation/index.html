@@ -32,6 +32,14 @@
             .reveal pre code {
             	overflow: visible;
             }
+            .reveal .slides img.boring {
+				position: relative; 
+				top: -250px;
+				box-shadow: none;
+            	transform: rotate(-8deg);
+				-ms-transform: rotate(-8deg); /* IE 9 */
+				-webkit-transform: rotate(-8deg); /* Safari and Chrome */
+            }
         </style>
 </head>
 
@@ -49,9 +57,7 @@
                 <a href="http://github.com/mtayseer">Github</a>
             </section>
 
-        
-
-            <section>
+            <section class=stretch>
                 <h2>How web applications works</h2>
                 <ol style="float: left">
                 	<li class=fragment data-fragment-index=0>Application</li>
@@ -59,17 +65,17 @@
                 	<li class=fragment data-fragment-index=2>Templates</li>
                 	<li class=fragment data-fragment-index=6>Data store</li>
                 </ol>
-                    <pre class="prettyprint" style="float: right"><code data-trim>
+                    <pre class="prettyprint lang-py" style="float: right"><code data-trim>
 <span class=fragment data-fragment-index=3>JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)</span>
 
-<span class=fragment data-fragment-index=6>class Garbage(ndb.Model):
-    author = ndb.UserProperty()
-    name = ndb.StringProperty(indexed=False)
-    date = ndb.DateTimeProperty(auto_now_add=True)
-    position = ndb.GeoPtProperty()</span>
+<span class=fragment data-fragment-index=6>class Garbage(ndb.Model):</span>
+    <span class=fragment data-fragment-index=7>name = ndb.StringProperty(indexed=True)</span>
+    <span class=fragment data-fragment-index=8>date = ndb.DateTimeProperty(auto_now_add=True)</span>
+    <span class=fragment data-fragment-index=9>author = ndb.UserProperty()</span>
+    <span class=fragment data-fragment-index=10>position = ndb.GeoPtProperty()</span>
 <span class=fragment data-fragment-index=1>
 class MainPage(webapp2.RequestHandler):
     def get(self):
@@ -86,7 +92,70 @@ application = webapp2.WSGIApplication([
             </section>
 
             <section>
-            	<h2>How web applications works</h2>
+            	<h2>Jinja2 templates</h2>
+            	<pre class="prettyprint lang-html"><code data-trim>
+{% if user %}
+    Hello, &lt;b&gt;{{ user.nickname() }}&lt;/b&gt; &lt;a href="{{ logout_url }}"&gt;Logout&lt;/a&gt;
+    &lt;button onclick="startAddPoint();return false;"&gt;Add new gargage marker&lt;/button&gt;
+{% else %}
+    Please &lt;b&gt;&lt;a href="{{ login_url }}"&gt;login with Google&lt;/a&gt;&lt;/b&gt; to add garbage markers
+{% endif %}
+            	</code></pre>
+            </section>
+
+            <section>
+            	<h2>YAML configurations</h2>
+            	<pre class=prettyprint><code data-trim>
+<span class=fragment>application: your-app-id
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+</span>
+<span class=fragment>
+handlers:
+- url: /static/*
+  static_dir: static
+</span>
+<span class=fragment>
+- url: /.*
+  script: garbage_map.application
+</span>
+<span class=fragment>
+libraries:
+- name: webapp2
+  version: latest
+- name: jinja2
+  version: latest
+</span>
+</code></pre>
+            </section>
+
+			<section>
+				<h2>Interactive console</h2>
+				<img src="images/interactive-console.png" alt="">
+			</section>
+
+			<section>
+				<h2>Datastore viewer</h2>
+				<img src="images/db-viewer.png" alt="">
+			</section>
+            
+
+            <section>
+            	<h2>Demo</h2>
+            	<img style="width: 500px; height: 500px" src="images/blog-word-cloud1.jpg" alt="http://toddbacile.wordpress.com/2013/10/09/a-blog-the-path-to-a-social-media-job/">
+            	<br>
+            </section>
+
+            <section class=stretch>
+            	<h2><i>Boooooooooring</i></h2>
+            	<img src="images/boring-3.jpg" alt="http://www.sydneysiderblog.com/?p=557">
+            </section>
+
+            <section>
+            	<h2>Demo</h2>
+            	<iframe src="http://localhost:8080" style="width: 1000px; height: 600px"></iframe>
             </section>
 
             <section>
@@ -123,16 +192,6 @@ application = webapp2.WSGIApplication([
                     { src: 'reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
                 ]
             });
-
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-35924859-1']);
-        _gaq.push(['_trackPageview']);
-
-        (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
 
         </script>
 
