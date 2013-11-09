@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+    <link rel="stylesheet" href="http://leaflet.github.io/Leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="http://leaflet.github.io/Leaflet.markercluster/dist/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" />
+ <!--[if lte IE 8]>
+     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
+     <link rel="stylesheet" href="https://raw.github.com/Leaflet/Leaflet.markercluster/master/dist/MarkerCluster.Default.css" />
+ <![endif]-->
+
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map-canvas { height: 100% }
+      #info {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        width: 300px;
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        padding: 20px;
+      }
+    </style>
+   
+  </head>
+  <body>
+    <div id="map-canvas"></div>
+    <div id="info">
+        {% if user %}
+            Hello, <b>{{ user.nickname() }}</b> <a href="{{ logout_url }}">Logout</a>
+            <button onclick="startAddPoint();return false;">Add new gargage marker</button>
+        {% else %}
+            Please <b><a href="{{ login_url }}">login with Google</a></b> to add garbage markers
+        {% endif %}
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+    <script src="http://leaflet.github.io/Leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+    <script type="text/javascript">
+      // create a map in the "map" div, set the view to a given place and zoom
+      var map = L.map('map-canvas').setView([30.067, 31.264], 13);
+
+      // add an OpenStreetMap tile layer
+      var tilesUrl = 'https://{s}.tiles.mapbox.com/v3/examples.map-zr0njcqy/{z}/{x}/{y}.png';
+      L.tileLayer(tilesUrl, {
+          attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+      }).addTo(map);
+
+      map.zoomControl.setPosition('topright');
+
+      var markers = L.featureGroup();
+      {% if garbage_marks %}
+          {% for marker in garbage_marks %}
+              markers.addLayer(L.marker([{{ marker.position.lat }}, {{marker.position.lon}}]).bindPopup("{{ marker.name }}"));
+          {% endfor %}
+          map.addLayer(markers);
+          map.fitBounds(markers.getBounds());
+      {% endif %}
+
+      var popup = L.popup();
+
+      function startAddPoint() {
+          map.addEventListener('click', onMapClick);
+          document.getElementById('map-canvas').style.cursor = 'crosshair';
+      }
+
+      function onMapClick(e) {
+          console.log('onMapClick');
+          var markerLocation = new L.LatLng(e.latlng.lat, e.latlng.lng);
+          var form =  
+                '<form id="inputform" enctype="multipart/form-data" class="well" method="post" action="add_zebala">'+
+                '<label><strong>Name:</strong> <i>marker title</i></label>'+
+                '<input type="text" class="span3" placeholder="Required" id="name" name="name" />'+
+                '<input type="hidden" value="' + e.latlng.lat + '" class="span3" id="lat" name="lat" />'+
+                '<input type="hidden" value="' + e.latlng.lng + '" class="span3" id="lng" name="lng" />'+
+
+                '<div class="row-fluid">'+
+                  '<div class="span6" style="text-align:center;"><button type="button" class="btn" onclick="cancelAddition()">Cancel</button></div>'+
+                  '<div class="span6" style="text-align:center;"><button type="button" class="btn btn-primary" onclick="insertUser()">Submit</button></div>'+
+                '</div>'+
+                '</form>';
+          popup.setLatLng(e.latlng).setContent(form).openOn(map);
+          console.log('onMapClick end');
+      }
+
+      function resetAddition() {
+          document.getElementById('map-canvas').style.cursor = '';
+          map.removeEventListener('click', onMapClick);
+          map.closePopup();
+      }
+
+      function insertUser() {
+          $.getJSON('/add', {
+            'name': $('#name').val(),
+            'lat': $('#lat').val(),
+            'lng': $('#lng').val()});
+          L.marker(popup._latlng).addTo(map);
+          resetAddition();
+      }
+
+    </script>
+
+  </body>
+</html>
