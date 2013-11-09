@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+ <!--[if lte IE 8]>
+     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
+ <![endif]-->
+
+   
+  </head>
+  <body>
+    <div id="map-canvas" style="width: 600px; height: 600px;"></div>
+    <div id="info">
+      Hello user, or login URL
+    </div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+    <script type="text/javascript">
+      // create a map in the "map" div, set the view to a given place and zoom
+      var map = L.map('map-canvas').setView([30.067, 31.264], 13);
+
+      // add an OpenStreetMap tile layer
+      var tilesUrl = 'https://{s}.tiles.mapbox.com/v3/examples.map-zr0njcqy/{z}/{x}/{y}.png';
+      L.tileLayer(tilesUrl, {
+          attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+      }).addTo(map);
+
+      map.zoomControl.setPosition('topright');
+
+    </script>
+
+  </body>
+</html>
