@@ -1,4 +1,4 @@
-import cgi, webapp2, urllib, jinja2, os
+import webapp2, jinja2, os
 
 from google.appengine.api import users
 from google.appengine.ext import ndb
@@ -8,18 +8,11 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
 
-DEFAULT_MAP_DATA = 'default_map_data_1'
-
 class Garbage(ndb.Model):
-    name = ndb.StringProperty(indexed=False)
+    name = ndb.StringProperty()
     date = ndb.DateTimeProperty(auto_now_add=True)
     author = ndb.UserProperty()
     position = ndb.GeoPtProperty()
-
-
-def garbage_key(store_name=DEFAULT_MAP_DATA):
-    """Constructs a Datastore key for a Garbage entity with store_name."""
-    return ndb.Key('Garbage', store_name)
 
 class MainPage(webapp2.RequestHandler):
 
